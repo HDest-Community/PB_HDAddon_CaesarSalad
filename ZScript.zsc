@@ -1,0 +1,40 @@
+// HD's main ZScript lump.
+
+version "4.11"
+#include "ZScript/MACZombie.zsc"
+#include "ZScript/ColtZombie.zsc"
+#include "ZScript/ACRZombie.zsc"
+
+class PB_HDCaesarSaladSpawner : EventHandler
+{
+override void CheckReplacement(ReplaceEvent e) {
+	if (!PB_CaesarSalad_AllowReplacement)
+		return;
+	switch (e.Replacee.GetClassName()) {
+	
+	//Andy McNab look-a-like
+		case 'ZombieMan' 	: if (!random(0, 2)) 
+		{
+			if(random(0,1)){e.Replacement = "PB_ColtSMGZombie";}
+			else{e.Replacement = "PB_UndeadHomeslice";}
+		}	
+		break;
+		
+		case 'ShotgunGuy' 	: if (!random(0, 2)) 
+		{
+			if(random(0,1)){e.Replacement = "PB_UndeadHomeslice";}
+			else{e.Replacement = "PB_ColtSMGZombie";}
+		}	
+		break;
+		
+		case 'ChaingunGuy' 	: if (!random(0, 2))		
+		{
+			if(random(0,1)){e.Replacement = "PB_ACRZombie";}
+			else{e.Replacement = "PB_ColtSMGZombie";}
+		}	
+		break;
+		
+		}
+	e.IsFinal = false;
+	}
+}

@@ -1,0 +1,8 @@
+-	.355 SMG Zombie base sprites by Skelegant and HorrorMovieRei, provided by Melodica.
++	Balaclava added by potetobloke
+
+-	.50 AM Pistol zombie from an unknown source. 
++	Pain sprites and balaclava by potetobloke
+
+-	ACR Zombies from DRLA, with Yholl's permission.
++	ADS sprites by potetobloke, based off of the ones in HDest.
