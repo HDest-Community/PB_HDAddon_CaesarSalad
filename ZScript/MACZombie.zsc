@@ -125,14 +125,14 @@ class PB_UndeadHomeslice:HDHumanoid{
 		painsound "grunt/pain";
 		deathsound "grunt/death";
 		activesound "grunt/active";
-		tag "Magnum Pistol Zombie";
+		tag "''Jackboot Jr.''";
 
 		radius 10;
 		speed 10;
 		mass 100;
 		painchance 200;
-		obituary "%o was put down by a magnum zombie.";
-		hitobituary "%o was pistol whipped by a zombie.";
+		obituary "%o was swiss cheesed by a junior jackboot.";
+		hitobituary "%o was pistol whipped by a junior jackboot.";
 		maxtargetrange HDCONST_ONEMETRE*30;
 	}
 	states{

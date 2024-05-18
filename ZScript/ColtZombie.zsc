@@ -202,7 +202,7 @@ class PB_ColtSMGZombie:HDHumanoid{
 				return;
 			}else{
 				A_StartSound("weapons/smg/355",CHAN_WEAPON);
-				HDBulletActor.FireBullet(self,"HDB_355",spread:2.5,speedfactor:1.25);
+				HDBulletActor.FireBullet(self,"HDB_355",spread:3.5,speedfactor:1.25);
 				
 				
 		HDWeapon.EjectCasing(self,"HDSpent355",
@@ -216,6 +216,7 @@ class PB_ColtSMGZombie:HDHumanoid{
 				mag--;}
 		}
 		#### E 2{spread++;}
+		#### A 0 A_FaceLastTargetPos(30);
 		#### A 0 A_Jump(220,"fire");
 	postshot:
 		#### E 12{
