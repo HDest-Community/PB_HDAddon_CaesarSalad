@@ -3,7 +3,9 @@
 version "4.11"
 #include "ZScript/MACZombie.zsc"
 #include "ZScript/ColtZombie.zsc"
-#include "ZScript/ACRZombie.zsc"
+#include "ZScript/ACRZombie_Old.zsc"
+
+//#include "ZScript/Weapons/M4Flechette.zsc"
 
 class PB_HDCaesarSaladSpawner : EventHandler
 {
@@ -13,14 +15,14 @@ override void CheckReplacement(ReplaceEvent e) {
 	switch (e.Replacee.GetClassName()) {
 	
 	//Andy McNab look-a-like
-		case 'ZombieMan' 	: if (!random(0, 2)) 
+		case 'ZombieMan' 	: if (!random(0, 3)) 
 		{
-			if(random(0,1)){e.Replacement = "PB_ColtSMGZombie";}
-			else{e.Replacement = "PB_UndeadHomeslice";}
+			if(random(0,1)){e.Replacement = "PB_UndeadHomeslice";}
+			else{e.Replacement = "PB_ColtSMGZombie";}
 		}	
 		break;
 		
-		case 'ShotgunGuy' 	: if (!random(0, 2)) 
+		case 'ShotgunGuy' 	: if (!random(0, 3)) 
 		{
 			if(random(0,1)){e.Replacement = "PB_UndeadHomeslice";}
 			else{e.Replacement = "PB_ColtSMGZombie";}
@@ -30,11 +32,41 @@ override void CheckReplacement(ReplaceEvent e) {
 		case 'ChaingunGuy' 	: if (!random(0, 2))		
 		{
 			if(random(0,1)){e.Replacement = "PB_ACRZombie";}
-			else{e.Replacement = "PB_ColtSMGZombie";}
+			else{e.Replacement = "PB_ACRZombie";} 
+			
+			//placeholder since I'm planning to have a different enemy also spawn on the chaingunner
 		}	
 		break;
 		
 		}
 	e.IsFinal = false;
 	}
+		
+		
+	//honestly considering whether i should really keep the AR-15 or not
+	
+	/*
+	void PushItem(Actor T, string item) {
+		let A = HDPickup(T);
+		A.itemsthatusethis.push(item);
+	}
+
+	override void WorldThingSpawned(WorldEvent e) {
+		let T = e.Thing;
+		
+		// Null check for event removal. 
+		if(!T)return;
+		
+		switch (T.GetClassName()) {
+		
+		case 'HD6mmFlechetteAmmo':
+			PushItem(T, "HDColtCommando_CS");
+			break;
+			
+		case 'PB_HDSteyrACRMag':
+			PushItem(T, "HDColtCommando_CS");
+			break;
+		}
+	}
+	*/
 }

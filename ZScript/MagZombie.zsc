@@ -194,6 +194,7 @@ class PB_UndeadHomeslice:HDHumanoid{
 		#### ABCD 3 A_TurnToAim(20);
 		loop;
 	shoot:
+		#### E 6;
 		#### E 1 A_SetTics(min(1,int(lasttargetdist)>>5));
 		#### E 2 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1));
 	fire:

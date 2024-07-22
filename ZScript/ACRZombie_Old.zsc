@@ -14,7 +14,7 @@ class PB_ACRZombie:HDHumanoid{
 		activesound "grunt/active";
 		tag "Undead Contractor";
 
-		health 95;
+		health 85;
 		speed 8;
 		painchance 200;
 		obituary "%o was given an acupuncture.";
@@ -30,7 +30,7 @@ class PB_ACRZombie:HDHumanoid{
 		super.postbeginplay();
 		
 		bhashelmet;
-		givearmour(1.,0.06,-0.4);
+		givearmour(1.,0.,-0.4); //no chance to spawn with blue armor
 		
 		if(user_weapon)accuracy=user_weapon;
 		if(accuracy==1)firemode=random(0,3);
@@ -149,7 +149,7 @@ class PB_ACRZombie:HDHumanoid{
 		if(bhasdropped&&bfriendly)return;
 		hdweapon wp=null;{
 			if(!bhasdropped){
-				if(wp=DropNewWeapon("HDColtCommando_CS")){
+				if(wp=DropNewWeapon("HD_SteyrACR")){
 					(random(0,1)*SACRS_CHAMBER);
 					wp.weaponstatus[SACRS_MAG]=mag;
 					if(firemode==-1)wp.weaponstatus[0];
@@ -284,8 +284,8 @@ class PB_ACRZombie:HDHumanoid{
 				mag--;}
 		}
 		#### E 1{spread++;}
-		#### E random(2,4) A_FaceLastTargetPos(30);
-		#### E 0 A_Jump(211,"fire");
+		#### E random(5,8) A_FaceLastTargetPos(80);
+		#### E 0 A_Jump(128,"fire");
 	postshot:
 		#### E 12{
 			if(!random(0,127))A_Vocalize(activesound);
