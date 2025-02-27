@@ -37,6 +37,7 @@ override void CheckReplacement(ReplaceEvent e) {
 			
 			//placeholder since I'm planning to have a different enemy also spawn on the chaingunner
 		}
+		break;
 		
 		case 'HellKnight' 	: if (!random(0, 2))		
 		{
