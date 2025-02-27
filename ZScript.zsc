@@ -4,6 +4,7 @@ version "4.11"
 #include "ZScript/MACZombie.zsc"
 #include "ZScript/ColtZombie.zsc"
 #include "ZScript/ACRZombie_Old.zsc"
+#include "ZScript/Bulldozer.zsc"
 
 //#include "ZScript/Weapons/M4Flechette.zsc"
 
@@ -35,7 +36,14 @@ override void CheckReplacement(ReplaceEvent e) {
 			else{e.Replacement = "PB_ACRZombie";} 
 			
 			//placeholder since I'm planning to have a different enemy also spawn on the chaingunner
+		}
+		
+		case 'HellKnight' 	: if (!random(0, 2))		
+		{
+			if(random(0,1)){e.Replacement = "PB_DozerZombie";}
+			else{e.Replacement = "PB_DozerZombie";} 
 		}	
+		
 		break;
 		
 		}

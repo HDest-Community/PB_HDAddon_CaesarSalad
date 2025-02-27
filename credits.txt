@@ -6,3 +6,6 @@
 
 -	ACR Zombies from DRLA, with Yholl's permission.
 +	ADS sprites by potetobloke, based off of the ones in HDest.
+
+-	"Bulldozer" Zombies by NotMuchNormal
++	Edits by potetobloke, helmet is based off of the Peace Sentinel Heavy Armor from MGS:PW

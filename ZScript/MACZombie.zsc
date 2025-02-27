@@ -128,7 +128,7 @@ class PB_UndeadHomeslice:HDHumanoid{
 		tag "''Jackboot Jr.''";
 
 		radius 10;
-		speed 10;
+		speed 23;
 		mass 100;
 		painchance 200;
 		obituary "%o was swiss cheesed by a junior jackboot.";

@@ -1,25 +1,36 @@
 // ------------------------------------------------------------
-// Former Human
+// MAKE WAY FOR THE DOOOOOZEEEEER
 // ------------------------------------------------------------
 
-class PB_ACRZombie:HDHumanoid{
+class PB_DozerZombie:HDHumanoid{
 	default{
 		//$Category "Monsters/Hideous Destructor"
-		//$Title "Zombieman (Flechette Rifle)"
-		//$Sprite "CRZMA0"
+		//$Title "Bulldozer"
+		//$Sprite "BDZRA0"
 
-		seesound "grunt/sight";
-		painsound "grunt/pain";
-		deathsound "grunt/death";
-		activesound "grunt/active";
-		tag "Undead Contractor";
-
-		health 95;
-		speed 8;
-		painchance 200;
+		radius 14;
+		height 54;
 		
-		obituary "%o was given an acupuncture.";
-		hitobituary "%o felt some pins and needles.";
+		+missilemore
+		
+		monster;
+		maxtargetrange 1000;
+		
+		seesound "grunt/bulldozer/sight";
+		painsound "grunt/bulldozer/pain";
+		deathsound "grunt/bulldozer/death";
+		activesound "grunt/bulldozer/active";
+		tag "Bulldozer";
+		hdmobbase.stepsound "grunt/bulldozer/step";
+		//hdmobbase.gunheight 12;
+
+		painchance 60;
+		//hdmobbase.shields 50;
+		health 500; //to compensate them being a HK replacement
+		mass 200;
+		speed 9;
+		obituary "%o caught all the buckshot from the bulldozer.";
+		hitobituary "%o was flattened by a bulldozer.";
 	}
 	double turnamount;
 	int user_weapon;
@@ -30,25 +41,22 @@ class PB_ACRZombie:HDHumanoid{
 	override void postbeginplay(){
 		super.postbeginplay();
 		
+		gunheight=32;
 		bhashelmet;
-		givearmour(1.,0.,-0.4); //no chance to spawn with blue armor
+		bnoincap;
+		givearmour(1.,1.,0.0); //spawns with blue armor
 		
-		if(user_weapon)accuracy=user_weapon;
-		if(accuracy==1)firemode=random(0,3);
-		else if(accuracy==2)firemode=-1;
-		else firemode=random(-1,3);
-		if(firemode==-1){
-			mag=random(1,42);
-		}else{
-			mag=random(1,42);
-			if(firemode>2)firemode=1;
-			maxtargetrange=2500;
-		}
+		mag=random(1,10);
 	}
 	
 	override void tick()
 	{
 		super.tick();
+		
+		if(!instatesequence(curstate,resolvestate("sliding")))
+		{
+			A_SpriteOffset(0,0);
+		}
 		
 		if(instatesequence(curstate,resolvestate("aiming.lr"))
 		||instatesequence(curstate,resolvestate("aiming"))
@@ -59,8 +67,8 @@ class PB_ACRZombie:HDHumanoid{
 			A_LaserSight();
 			if(!isfrozen())
 			{
-				A_SetAngle(angle+frandom(-0.075,0.075),SPF_INTERPOLATE);
-				A_SetPitch(pitch+frandom(-0.075,0.075),SPF_INTERPOLATE);
+				A_SetAngle(angle+frandom(-0.03,0.03),SPF_INTERPOLATE);
+				A_SetPitch(pitch+frandom(-0.03,0.03),SPF_INTERPOLATE);
 			}
 		}
 	}
@@ -123,14 +131,14 @@ class PB_ACRZombie:HDHumanoid{
 	void A_ZomFrag(){
 		bool garbage;actor gg;
 		double cpp=cos(pitch);double spp=sin(pitch);
-		[garbage,gg]=A_SpawnItemEx("HDFragSpoon",
+		[garbage,gg]=A_SpawnItemEx("HDFlashbangSpoon",
 			cpp*-4,-3,height-6-spp*-4,
 			cpp*3,0,-spp*3,
 			frandom(30,45),SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH
 		);
 		gg.vel+=self.vel;
 		double gforce=frandom(10,30);
-		[garbage,gg]=A_SpawnItemEx("HDFragGrenade",
+		[garbage,gg]=A_SpawnItemEx("HDFlashbangThrown",
 			0,0,height-6,
 			cpp*gforce,0,-spp*gforce,
 			0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH
@@ -138,11 +146,11 @@ class PB_ACRZombie:HDHumanoid{
 		gg.vel+=self.vel;
 	}
 	
-	void A_EjectACRCasing(){
-		HDWeapon.EjectCasing(self,"HDSpent6mmFlechette",
-			frandom(-0.5,0.5),
-			(frandom(0,1),0,frandom(0,1)),
-			(2,0,0)
+	void A_EjectShotgunCasing(){
+		HDWeapon.EjectCasing(self,"HDSpentShell",
+			-frandom(79,81),
+			(frandom(7,7.5),0,0),
+			(13,0,0)
 		);
 	}
 	
@@ -150,15 +158,13 @@ class PB_ACRZombie:HDHumanoid{
 		if(bhasdropped&&bfriendly)return;
 		hdweapon wp=null;{
 			if(!bhasdropped){
-				if(wp=DropNewWeapon("HDColtCommando_CS")){
+				if(wp=DropNewWeapon("HD_CAWSGUN")){
 					(random(0,1)*SACRS_CHAMBER);
 					wp.weaponstatus[SACRS_MAG]=mag;
 					if(firemode==-1)wp.weaponstatus[0];
 				}
-				DropNewItem("HDFragGrenadeAmmo",42);
-				if (!random(0, 8))DropNewWeapon("HDCombatKnife");
 			}else{
-				DropNewItem("PB_HDSteyrACRMag",96);
+				DropNewItem("HD_CAWSMag",96);
 			}
 		}
 		if(!bhasdropped){
@@ -183,12 +189,14 @@ class PB_ACRZombie:HDHumanoid{
 	
 	states{
 	spawn:
-		CRZM A 0;
+		BDZR A 0;
 	idle:
 	spawn2:
 		#### A 0{
+			A_SpriteOffset(0,0);
 			A_HDLook();
 			A_Recoil(frandom(-0.1,0.1));
+			bnofear;
 		}
 		#### EEE 1{
 			A_SetTics(random(5,17));
@@ -224,7 +232,7 @@ class PB_ACRZombie:HDHumanoid{
 		#### B 1 A_SetTics(random(10,40));
 		#### A 0 A_Jump(256,"spawn2");
 	spawnwander:
-		CRZM A 0 A_HDLook();
+		BDZR A 0 A_HDLook();
 		#### CD 5 A_Wander();
 		#### AB 5{
 			A_HDLook();
@@ -239,12 +247,13 @@ class PB_ACRZombie:HDHumanoid{
 				setstatelabel("spawn2");
 				return;
 			}
-			double dt=distance3d(target);
-			/*if(
+			//he is so unbelievably ass to fight against
+			/*double dt=distance3d(target);
+			if(
 				target
-				&&!random(0,12)
-				&&dt>600
-				&&dt<1000
+				&&!random(0,2)
+				&&dt>25
+				&&dt<400
 			)setstatelabel("frag");*/
 		}
 	missile2:
@@ -256,37 +265,47 @@ class PB_ACRZombie:HDHumanoid{
 			double dt=distance3d(target);
 			if(
 				target
-				&&dt>300
+				&&dt>550
 			)setstatelabel("aiming.lr");
 		}
-		#### E 5 {A_FaceLastTargetPos(30);A_Vocalize(seesound);}
+		sliding:
+		#### A 0 A_StartSound("player/hdguy/land",flags:CHANF_OVERLAP);
+		#### W 0 A_HumanoidMeleeAttack(frandom(height*0.05,(!!target?target.height:0.4)),6.4);
+		#### AAAWWWWWW 1 
+		{
+			A_Recoil(-1.75);
+			A_SpriteOffset(frandom(-1,1),frandom(-1,1));
+			//A_HumanoidMeleeAttack(frandom(height*0.05,(!!target?target.height:0.4)),1.4);
+		}
+		postslide:
+		#### W 5 
+		{
+			A_FaceTarget(50,25);
+			A_Vocalize(seesound);
+			A_SpriteOffset(0,0);
+		}
 		#### E 1 A_StartAim(maxspread:20,maxtics:random(0,35));
 		//fallthrough to shoot
 	shoot:
-		#### F 1 A_SetTics(min(1,int(lasttargetdist)>>5));
-		#### E 0{
-			pitch+=frandom(-spread,spread);
-			angle+=frandom(-spread,spread);
-			
-			A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1));
-		}
+		#### E 1 A_SetTics(min(1,int(lasttargetdist)>>5));
+		#### E 0 A_FaceTarget(5,75);
 	fire:
+		//#### E 2 A_LeadTarget(6);
 		#### F 1 bright light("SHOT"){
 			if(mag<1){
 				setstatelabel("ohforfuckssake");
 				return;
 			}else{
-				A_StartSound("weapons/steyracr/fire",CHAN_WEAPON);
-				HDBulletActor.FireBullet(self,"HDB_6mmFlechette",spread:1.85,speedfactor:0.9);
-				A_EjectACRCasing();
-				
-				pitch+=frandom(-0.2,0.1)*spread;
-				angle+=frandom(-0.2,0.1)*spread;
-				mag--;}
+				//A_StartSound("weapons/steyracr/fire",CHAN_WEAPON);
+				HD_CAWSGUN.FireShell(self);
+				A_EjectShotgunCasing();
+				mag--;
+				}
 		}
-		#### E 1{spread++;}
-		#### E random(2,4) A_FaceLastTargetPos(30);
-		#### E 0 A_Jump(211,"fire");
+		#### E 3;
+		#### EEE 2 A_FaceTarget(4,75);
+		#### E 0 A_JumpIfTargetInLOS("shoot");
+		#### E 0 A_Jump(128,"shoot");
 	postshot:
 		#### E 12{
 			if(!random(0,127))A_Vocalize(activesound);
@@ -306,7 +325,7 @@ class PB_ACRZombie:HDHumanoid{
 		goto coverfire;
 
 	coverfire:
-		#### V 1{
+		#### E 1{
 			spread=2;
 			A_Coverfire();
 			A_SetTics(random(2,6));
@@ -314,34 +333,32 @@ class PB_ACRZombie:HDHumanoid{
 		wait;
 
 	aiming.lr:
-		#### V 9 {A_FaceLastTargetPos(60);A_Vocalize(activesound);}
-		#### V 1 A_StartAim(maxspread:20,maxtics:random(0,35));
-		#### V 1 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1));
+		#### E 3 {A_FaceLastTargetPos(60);A_Vocalize(activesound);}
+		#### E 1 A_StartAim(maxspread:20,maxtics:random(0,35));
+		#### E 1 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1));
 		//fallthrough to shoot
 	shoot.lr:
-		#### V 1 A_SetTics(min(1,int(lasttargetdist)>>5));
-		#### V 0{
+		#### E 1 A_SetTics(min(1,int(lasttargetdist)>>5));
+		#### E 0{
 			pitch+=frandom(-spread,spread);
 			angle+=frandom(-spread,spread);
 		}
 	fire.lr:
-		#### W 1 bright light("SHOT"){
+		#### F 1 bright light("SHOT"){
 			if(mag<1){
 				setstatelabel("ohforfuckssake");
 				return;
 			}else{
-				A_StartSound("weapons/steyracr/fire",CHAN_WEAPON);
-				HDBulletActor.FireBullet(self,"HDB_6mmFlechette",spread:0.95,speedfactor:0.9);
-				A_EjectACRCasing();
-				pitch+=frandom(-spread,spread*0.5)*0.1;
-				angle+=frandom(-spread*0.5,spread)*0.1;
+				//A_StartSound("weapons/steyracr/fire",CHAN_WEAPON);
+				HD_CAWSGUN.FireShell(self);
+				A_EjectShotgunCasing();
 				mag--;}
 		}
-		#### V 2;
+		#### E 2;
 		#### A 0; //A_Jump(128,"fire.lr");
 		//fallthrough to postshot
 	postshot.lr:
-		#### V 12{
+		#### E 8{
 			if(!random(0,127))A_Vocalize(activesound);
 			if(mag<1){
 				setstatelabel("reload");
@@ -350,24 +367,22 @@ class PB_ACRZombie:HDHumanoid{
 			spread=max(0,spread-1);
 			A_SetTics(random(2,6));
 		}
-		#### V 3;
-		#### V 0 A_JumpIf(!hdmobai.tryshoot(self),"see");
-		#### V 0 A_JumpIfTargetInLOS(1);
-		goto coverfire;  //even if not in los,occasionally keep shooting anyway
-		#### V 3 A_FaceTarget(10,10);
-		#### V 0 A_Jump(50,"see");  //even if in los,occasionally stop shooting anyway
-		goto coverfire;
+		#### E 3;
+		#### E 0 A_JumpIf(!hdmobai.tryshoot(self),"see");
+		#### E 3 A_FaceTarget(10,10);
+		//#### E 0 A_Jump(50,"see");  //even if in los,occasionally stop shooting anyway
+		goto see;
 		
 	frag:
-		#### A 10 A_Vocalize(seesound);
-		#### A 20{
+		#### A 5 A_Vocalize(seesound);
+		#### A 5{
 			A_StartSound("weapons/pocket",CHAN_WEAPON);
 			A_FaceTarget(0,0);
 			pitch-=random(10,50);
 		}
-		#### E 15;
-		#### E 10{
-			A_SpawnItemEx("HDFragSpoon",cos(pitch)*4,-1,height-6-sin(pitch)*4,cos(pitch)*cos(angle)*4+vel.x,cos(pitch)*sin(angle)*4+vel.y,sin(-pitch)*4+vel.z,0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+		#### E 3;
+		#### E 5{
+			//A_SpawnItemEx("HDFragSpoon",cos(pitch)*4,-1,height-6-sin(pitch)*4,cos(pitch)*cos(angle)*4+vel.x,cos(pitch)*sin(angle)*4+vel.y,sin(-pitch)*4+vel.z,0,SXF_ABSOLUTEMOMENTUM|SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 			A_ZomFrag();
 		}
 		#### A 0 A_JumpIf(mag<1,"reload");
@@ -382,39 +397,33 @@ class PB_ACRZombie:HDHumanoid{
 	ohforfuckssake:
 		#### E 8;
 	reload:
-		---- A 0 A_JumpIf(mag<0,"unloadedreload");
-		---- A 6 A_StartSound("weapons/rifleclick2");
+		#### A 0 A_JumpIf(mag<0,"unloadedreload");
+		#### A 2 A_StartSound("weapons/rifleclick2",8);
 		#### AA 1 A_HDChase("melee",null,flags:CHF_FLEE);
 		#### A 0{
-			A_StartSound("weapons/rifleunload");
-			name emptymag="PB_HDSteyrACRMag";
+			A_StartSound ("weapons/cawsmagout",8,CHANF_OVERLAP);
+			name emptymag="HD_CAWSMag";
 			HDMagAmmo.SpawnMag(self,emptymag,0);
 			mag=-1;
 		}
 	unloadedreload:
 		#### BCD 2 A_HDChase("melee",null,flags:CHF_FLEE);
-		#### EE random(12,16) A_StartSound("weapons/pocket",8);
-		#### E 12 {A_StartSound("weapons/rifleload",9);A_StartSound("weapons/rifleclick2");}
-		#### E 8{
-			A_StartSound("weapons/rifleclick2",8);
-			mag=25;
+		#### EE random(4,6) A_StartSound("weapons/pocket",8);
+		//#### E 3 {A_StartSound("weapons/rifleclick2");}
+		#### E 12{
+			A_StartSound ("weapons/cawsmagin",8,CHANF_OVERLAP);
+			mag=10;
 		}
-		#### E 4 {A_StartSound("weapons/steyracr/cock1",CHAN_6,volume:0.6,pitch:0.92);}
-		#### E 12 {A_StartSound("weapons/steyracr/cock2",CHAN_6,volume:0.6);}
+		#### E 14 {A_StartSound("weapons/cawsboltback",CHAN_6,volume:0.8);}
+		#### E 6 {A_StartSound("weapons/cawsboltfwd",CHAN_6,volume:0.8);}
 		#### CCBB 2 A_HDWander();
-
 	see:
-		#### A 0{if(firemode>=0)firemode=random(0,2);}
-	see2:
+		#### ABCD random(3,4) A_HDChase(speedmult:1.5);
 		#### A 0 A_JumpIf(!jammed&&mag<1,"reload");
-		#### ABCD 4 A_HDChase();
-		#### A 0{
-			spread=2;
-		}
-		#### A 0 A_JumpIfTargetInLOS("see");
-		#### A 0 A_Jump(24,"roam");
+		#### A 0 A_Jump(116,"roam","roam","roam","roam2","roam2");
 		loop;
 	roam:
+		#### A 0 A_JumpIf(!jammed&&mag<1,"reload");
 		#### E 3 A_Jump(60,"roam2");
 		#### E 0{spread=1;}
 		#### E 4 A_Watch();
@@ -479,13 +488,13 @@ class PB_ACRZombie:HDHumanoid{
 		#### A 0 setstatelabel("meleeend");
 	meleebody:
 		#### CD 3;
-		#### E 5 A_HumanoidMeleeAttack(height*0.6);
+		#### E 5 A_HumanoidMeleeAttack(height*0.6,3);
 		#### A 0 setstatelabel("meleeend");
 	meleehead:
 		#### CD 3;
 		#### E 5 {
 			pitch+=frandom(-40,-8);
-			A_HumanoidMeleeAttack(height*0.7);
+			A_HumanoidMeleeAttack(height*0.7,3);
 		}
 		#### A 0 setstatelabel("meleeend");
 	meleeheadbig:
@@ -494,11 +503,7 @@ class PB_ACRZombie:HDHumanoid{
 			pitch=0;
 			A_HumanoidMeleeAttack(frandom(height*0.05,(!!target?target.height:0.4)),1.4);
 		}
-		#### CB 3 A_TurnHandDirection(30);
-		#### A 8 A_TurnHandDirection(30);
-		#### BD 1 A_TurnHandDirection(-30);
-		#### V 1 {
-			A_TurnHandDirection(-30);
+		#### E 1 {
 			pitch+=frandom(-45,-8);
 			A_HumanoidMeleeAttack(height*0.7,15.);
 		}
@@ -514,7 +519,7 @@ class PB_ACRZombie:HDHumanoid{
 	meleeendshoot:
 		#### E 3;
 		#### E 4 A_FaceTarget(10,10);
-		#### A 0 setstatelabel("fire");
+		#### A 0 setstatelabel("shoot");
 
 	//melee end
 	falldown:
@@ -523,10 +528,10 @@ class PB_ACRZombie:HDHumanoid{
 		#### JJKKK 2 A_SetSize(-1,max(deathheight,height-10));
 		#### L 0 A_SetSize(-1,deathheight);
 		#### L 5;
-		#### L 10 A_KnockedDown();
+		#### M 10 A_KnockedDown();
 		wait;
 	standup:
-		#### LK 6;
+		#### MLK 6;
 		#### J 0 A_Jump(160,2);
 		#### J 0 A_Vocalize(seesound);
 		#### JI 4 A_Recoil(-0.3);
@@ -534,52 +539,52 @@ class PB_ACRZombie:HDHumanoid{
 		#### A 0 setstatelabel("see");
 
 	death:
-		CRZM H 5;
-		CRZM I 5{
+		BDZR H 5;
+		BDZR I 5{
 			A_Vocalize(deathsound);
 		}
-		CRZM J 5;
-		CRZM KL 5;
+		BDZR J 5;
+		BDZR KLM 5;
 	dead:
-		CRZM L 1;
-		CRZM L 5 canraise{
+		BDZR M 1;
+		BDZR M 5 canraise{
 			if(abs(vel.z)>1)setstatelabel("dead");
 		}wait;
 	xxxdeath:
-		CRZM O 3;
-		CRZM P 3{
+		BDZR N 3;
+		BDZR O 3{
 			A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
 			A_XScream();
 		}
-		CRZM R 2;
-		CRZM QRS 5;
+		BDZR P 2;
+		BDZR QRST 5;
 		---- A 0 setstatelabel("xdead");
 
 	xdeath:
-		CRZM O 5;
-		CRZM P 3{
+		BDZR N 5;
+		BDZR O 3{
 			A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
 			A_XScream();
 		}
-		CRZM R 2 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-		CRZM Q 5;
-		CRZM Q 0 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-		CRZM RS 5 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
+		BDZR P 2 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
+		BDZR QRS 5;
+		BDZR Q 0 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
+		BDZR T 5 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
 	xdead:
-		CRZM STT 3;
-		CRZM U 5 canraise{
+		BDZR U 3;
+		BDZR V 5 canraise{
 			if(abs(vel.z)>1)setstatelabel("dead");    
 		}wait;
 	raise:
-		CRZM M 2 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
-		CRZM ML 6;
-		CRZM KJIH 4;
+		BDZR M 2 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
+		BDZR ML 6;
+		BDZR KJIH 4;
 		#### A 0 A_Jump(256,"see");
 	ungib:
-		CRZM T 6 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
-		CRZM TS 12 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
-		CRZM RQ 7;
-		CRZM POH 5;
+		BDZR T 6 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
+		BDZR TS 12 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
+		BDZR RQ 7;
+		BDZR POH 5;
 		#### A 0 A_Jump(256,"see");
 	}
 }

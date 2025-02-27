@@ -1,0 +1,24 @@
+$random grunt/bulldozer/sight {grunt/bulldozer/see1 grunt/bulldozer/see2 grunt/bulldozer/see3}
+grunt/bulldozer/see1 "Sounds/Enemies/Dozer/DozerSee1.ogg"
+grunt/bulldozer/see2 "Sounds/Enemies/Dozer/DozerSee2.ogg"
+grunt/bulldozer/see3 "Sounds/Enemies/Dozer/DozerSee3.ogg"
+
+$random grunt/bulldozer/active {grunt/bulldozer/act1 grunt/bulldozer/act2 grunt/bulldozer/act3}
+grunt/bulldozer/act1 "Sounds/Enemies/Dozer/DozerAct1.ogg"
+grunt/bulldozer/act2 "Sounds/Enemies/Dozer/DozerAct2.ogg"
+grunt/bulldozer/act3 "Sounds/Enemies/Dozer/DozerAct3.ogg"
+
+grunt/bulldozer/pain "Sounds/Enemies/Dozer/DozerPain.ogg"
+
+$random grunt/bulldozer/death {grunt/bulldozer/die1 grunt/bulldozer/die2 grunt/bulldozer/die3}
+grunt/bulldozer/die1 "Sounds/Enemies/Dozer/DozerDie1.ogg"
+grunt/bulldozer/die2 "Sounds/Enemies/Dozer/DozerDie2.ogg"
+grunt/bulldozer/die3 "Sounds/Enemies/Dozer/DozerDie3.ogg"
+
+$random grunt/bulldozer/step {grunt/bulldozer/step1 grunt/bulldozer/step2 grunt/bulldozer/step3 grunt/bulldozer/step4 grunt/bulldozer/step5 grunt/bulldozer/step6}
+grunt/bulldozer/step1 "Sounds/Enemies/Dozer/DozerGear1.ogg"
+grunt/bulldozer/step2 "Sounds/Enemies/Dozer/DozerGear2.ogg"
+grunt/bulldozer/step3 "Sounds/Enemies/Dozer/DozerGear3.ogg"
+grunt/bulldozer/step4 "Sounds/Enemies/Dozer/DozerGear4.ogg"
+grunt/bulldozer/step5 "Sounds/Enemies/Dozer/DozerGear5.ogg"
+grunt/bulldozer/step6 "Sounds/Enemies/Dozer/DozerGear6.ogg"
