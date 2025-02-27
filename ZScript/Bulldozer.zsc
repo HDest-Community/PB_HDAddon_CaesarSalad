@@ -128,7 +128,7 @@ class PB_DozerZombie:HDHumanoid{
 					);
     }
 
-	void A_ZomFrag(){
+	/*void A_ZomFrag(){
 		bool garbage;actor gg;
 		double cpp=cos(pitch);double spp=sin(pitch);
 		[garbage,gg]=A_SpawnItemEx("HDFlashbangSpoon",
@@ -144,7 +144,7 @@ class PB_DozerZombie:HDHumanoid{
 			0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH
 		);
 		gg.vel+=self.vel;
-	}
+	}*/
 	
 	void A_EjectShotgunCasing(){
 		HDWeapon.EjectCasing(self,"HDSpentShell",
@@ -373,7 +373,7 @@ class PB_DozerZombie:HDHumanoid{
 		//#### E 0 A_Jump(50,"see");  //even if in los,occasionally stop shooting anyway
 		goto see;
 		
-	frag:
+	/*frag:
 		#### A 5 A_Vocalize(seesound);
 		#### A 5{
 			A_StartSound("weapons/pocket",CHAN_WEAPON);
@@ -386,7 +386,7 @@ class PB_DozerZombie:HDHumanoid{
 			A_ZomFrag();
 		}
 		#### A 0 A_JumpIf(mag<1,"reload");
-		#### A 0 setstatelabel("see");
+		#### A 0 setstatelabel("see");*/
 
 	jammed:
 		#### E 8;
