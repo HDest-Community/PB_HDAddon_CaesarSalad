@@ -22,3 +22,12 @@ grunt/bulldozer/step3 "Sounds/Enemies/Dozer/DozerGear3.ogg"
 grunt/bulldozer/step4 "Sounds/Enemies/Dozer/DozerGear4.ogg"
 grunt/bulldozer/step5 "Sounds/Enemies/Dozer/DozerGear5.ogg"
 grunt/bulldozer/step6 "Sounds/Enemies/Dozer/DozerGear6.ogg"
+
+$random grunt/specops/death {grunt/specops/die1 grunt/specops/die2 grunt/specops/die3}
+grunt/specops/die1 "Sounds/Enemies/SpecOps/SpecDeath1.ogg"
+grunt/specops/die2 "Sounds/Enemies/SpecOps/SpecDeath2.ogg"
+
+$random grunt/specops/pain {grunt/specops/pain1 grunt/specops/pain2 grunt/specops/pain3}
+grunt/specops/pain1 "Sounds/Enemies/SpecOps/SpecPain1.ogg"
+grunt/specops/pain2 "Sounds/Enemies/SpecOps/SpecPain2.ogg"
+grunt/specops/pain3 "Sounds/Enemies/SpecOps/SpecPain3.ogg"

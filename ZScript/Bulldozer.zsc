@@ -558,20 +558,20 @@ class PB_DozerZombie:HDHumanoid{
 		}
 		BDZR P 2;
 		BDZR QRST 5;
-		---- A 0 setstatelabel("xdead");
+		---- A 0 setstatelabel("gib");
 
-	xdeath:
+	gib:
 		BDZR N 5;
-		BDZR O 3{
+		BDZR O 4{
 			A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
 			A_XScream();
 		}
-		BDZR P 2 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-		BDZR QRS 5;
+		BDZR P 4 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
+		BDZR QRS 4;
 		BDZR Q 0 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-		BDZR T 5 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-	xdead:
-		BDZR U 3;
+		BDZR T 4 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
+	gibbed:
+		BDZR U 4;
 		BDZR V 5 canraise{
 			if(abs(vel.z)>1)setstatelabel("dead");    
 		}wait;
@@ -581,10 +581,10 @@ class PB_DozerZombie:HDHumanoid{
 		BDZR KJIH 4;
 		#### A 0 A_Jump(256,"see");
 	ungib:
-		BDZR T 6 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
-		BDZR TS 12 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
-		BDZR RQ 7;
-		BDZR POH 5;
+		BDZR U 6 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
+		BDZR TS 6 A_SpawnItemEx("MegaBloodSplatter",0,0,4,0,0,3,0,SXF_NOCHECKPOSITION);
+		BDZR RQPO 6;
+		BDZR N 5;
 		#### A 0 A_Jump(256,"see");
 	}
 }

@@ -504,21 +504,21 @@ class PB_ColtSMGZombie:HDHumanoid{
 		}
 		CMGZ R 2;
 		CMGZ QRS 5;
-		---- A 0 setstatelabel("xdead");
+		---- A 0 setstatelabel("gibbed");
 
-	xdeath:
-		CMGZ O 5;
+	gib:
+		CMGZ MNO 3;
 		CMGZ P 3{
 			A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
 			A_XScream();
 		}
-		CMGZ R 2 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-		CMGZ Q 5;
+		CMGZ R 3 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
+		CMGZ Q 3;
 		CMGZ Q 0 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-		CMGZ RS 5 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-	xdead:
-		CMGZ S 3;
-		CMGZ T 5 canraise{
+		CMGZ RST 3 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
+	gibbed:
+		CMGZ T 3;
+		CMGZ U 5 canraise{
 			if(abs(vel.z)>1)setstatelabel("dead");    
 		}wait;
 	raise:

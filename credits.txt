@@ -9,3 +9,8 @@
 
 -	"Bulldozer" Zombies by NotMuchNormal
 +	Edits by potetobloke, helmet is based off of the Peace Sentinel Heavy Armor from MGS:PW
+
+-	Spec-Ops Operator by DeeDeeOz
++	Voices sourced from Jagged Alliance 2, IMP Voice 3
+|	I unfortunately don't know who voiced him
++	Not much changes aside from some colors

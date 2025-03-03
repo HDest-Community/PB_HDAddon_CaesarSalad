@@ -1,0 +1,190 @@
+//GRENADE
+
+class HDGasGrenadeRoller_Special:HDFragGrenadeRoller{
+	//int fuze;
+	int gasamount;
+	int gotkicked;
+	default{
+			bouncetype "doom";bouncesound "misc/fragknock";
+		radius 2;height 2;damagetype "none";
+		scale 0.25;
+		//obituary "%o was gassed by %k.";
+		radiusdamagefactor 0.04;pushfactor 1.4;maxstepheight 2;
+		mass 42;
+	}
+	
+	override bool used(actor user){
+		angle=user.angle;
+		A_StartSound(bouncesound);
+		if(hdplayerpawn(user)&&hdplayerpawn(user).incapacitated)A_ChangeVelocity(4,0,1,CVF_RELATIVE);
+		else A_ChangeVelocity(12,0,4,CVF_RELATIVE);
+		
+		if(gasamount>=3&&gotkicked<=0)
+		{gotkicked++;actor balls=spawn("HD_PBGasEmit",self.pos-(frandom(-4,4),0,frandom(-4,4)));
+		A_StartSound("weapons/grenade/gas/end",CHAN_6,CHANF_OVERLAP,0.25
+		,pitch:frandom(1.75,2.25));HDMobAI.Frighten(self,128);}
+		return true;
+	}
+	
+	states{
+	
+	spawn:
+		GGR1 A 0 nodelay{
+			HDMobAI.Frighten(self,512);
+		}
+	spawn2:
+		#### AAA 2{
+			if(abs(vel.z-keeprolling.z)>10)A_StartSound("misc/fragknock",CHAN_BODY);
+			else if(floorz>=pos.z)A_StartSound("misc/fragroll");
+			keeprolling=vel;
+			if(abs(vel.x)<0.4 && abs(vel.y)<0.4) setstatelabel("death");
+		}loop;
+	bounce:
+		---- A 0{
+			bmissile=false;
+			vel*=0.2;
+		}goto spawn2;
+	death:
+		---- A 2{
+			if(abs(vel.z-keeprolling.z)>3){
+				A_StartSound("misc/fragknock",CHAN_BODY);
+				keeprolling=vel;
+			}
+			if(abs(vel.x)>0.4 || abs(vel.y)>0.4) setstatelabel("spawn");
+		}wait;
+		
+	nomore:
+		---- A 0 A_StopSound(CHAN_WEAPON);
+		/*---- A 1 {
+		bsolid=false;bpushable=false;bmissile=false;bnointeraction=true;bshootable=false;
+		}*/
+		---- A 1 A_Fadeout(0.001);
+		loop;
+	}
+	override void tick(){
+	
+		if(fuze>70){
+			keeprolling=vel;
+			hdactor.tick();
+		}
+
+		if(isfrozen())return;
+		else if(bnointeraction){
+			//nexttic
+			if(CheckNoDelay()){
+				if(tics>0)tics--;  
+				while(!tics){
+					if(!SetState(CurState.NextState)){
+						return;
+					}
+				}
+			}
+			return;
+		}else{
+			fuze++;
+			if(fuze>=70){
+				gasamount++;
+				
+			if(gasamount>=5)A_FadeOut(0.005);
+			
+			if(gasamount==1){A_StartSound("weapons/grenade/gas/start",CHAN_7,CHANF_OVERLAP,0.95);}
+			if(gasamount>=1&&gasamount<=3){
+			
+			for(int i=0;i<9;i++)
+			{
+				actor xpl=spawn("HD_PBGasEmit",self.pos-(frandom(-8,8),0,frandom(-8,8)));
+			}
+			A_StartSound("weapons/grenade/gas/end",CHAN_6,CHANF_OVERLAP,frandom(0.5,0.85)
+			,pitch:frandom(0.75,1.25),starttime:frandom(0,3));HDMobAI.Frighten(self,1024);}
+			
+			//if(gasamount>=1&&gasamount<=851){
+				//A_Recoil(frandom(-0.95,0.1));A_SetAngle(angle+frandom(-45,45),SPF_INTERPOLATE);}
+				//}
+				
+				if(CheckNoDelay()){
+					if(tics>0)tics--;  
+					while(!tics){
+						if(!SetState(CurState.NextState)){
+							return;
+						}
+					}
+				}
+				return;
+			}else hdactor.tick();
+		}
+	}
+}
+
+class HDGasGrenadeThrown_Special:HDFragGrenade{
+
+	int gasamount;
+	
+	default{
+		+ROLLSPRITE
+		+ROLLCENTER
+		scale 0.25;
+		//obituary "%o smelled something really bad.";
+		hdfraggrenade.rollertype "HDGasGrenadeRoller_Special";
+		mass 42;
+	}
+	
+	override void tick(){ //not redefining this causes a crash
+		ClearInterpolation();
+		if(isfrozen())return;
+		if(!bmissile){
+			hdactor.tick();return;
+		}else if(fuze<70){
+			fuze++;
+			keeprolling=vel;
+			hdactor.tick(); //this took me a week to figure out
+							//because super.tick crashes the game
+		}else{
+			if(inthesky){
+				A_SpawnChunksFrags();
+				destroy();return;
+			}
+			/*let tgr=HDGasGrenadeRoller(spawn(rollertype,pos,ALLOW_REPLACE));
+			tgr.target=self.target;tgr.master=self.master;tgr.vel=self.vel;
+			tgr.fuze=fuze;
+			destroy();return;*/
+			
+			keeprolling=vel;
+			hdactor.tick();
+			
+			gasamount++;
+			if(gasamount==1){A_StartSound("weapons/grenade/gas/start",CHAN_7,CHANF_OVERLAP,0.95);}
+			if(gasamount>=1&&gasamount<=3){
+			
+			for(int i=0;i<9;i++)
+			{
+				actor xpl=spawn("HD_PBGasEmit",self.pos-(frandom(-8,8),0,frandom(-8,8)));
+			}
+			
+				A_StartSound("weapons/grenade/gas/end",CHAN_6,CHANF_OVERLAP,frandom(0.5,0.85)
+				,pitch:frandom(0.75,1.25),starttime:frandom(0,3));HDMobAI.Frighten(self,1024);}
+			if(gasamount>=1&&gasamount<=1){
+				A_Recoil(-0.005);A_SetAngle(angle+1,SPF_INTERPOLATE);}
+		}
+	}
+	
+	states
+	{
+	spawn:
+		GGR3 ABCDEFGH 2 A_SetRoll(frandom(-15.5, 15.5));
+		loop;
+		
+	death:
+		TNT1 A 2{
+			bmissile=false;
+			let tgr=HDGasGrenadeRoller(spawn(rollertype,self.pos,ALLOW_REPLACE));
+			if(!tgr)return;
+			tgr.target=self.target;tgr.master=self.master;
+			tgr.fuze=self.fuze;
+			tgr.gasamount=self.gasamount;
+			tgr.vel=self.keeprolling;
+			tgr.keeprolling=self.keeprolling;
+			tgr.A_StartSound("misc/fragknock",CHAN_BODY);
+			HDMobAI.Frighten(tgr,512);
+		}stop;
+	}
+}

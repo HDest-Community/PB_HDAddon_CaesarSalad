@@ -553,9 +553,9 @@ class PB_ACRZombie:HDHumanoid{
 		}
 		CRZM R 2;
 		CRZM QRS 5;
-		---- A 0 setstatelabel("xdead");
+		---- A 0 setstatelabel("gibbed");
 
-	xdeath:
+	gib:
 		CRZM O 5;
 		CRZM P 3{
 			A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
@@ -564,9 +564,9 @@ class PB_ACRZombie:HDHumanoid{
 		CRZM R 2 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
 		CRZM Q 5;
 		CRZM Q 0 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-		CRZM RS 5 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
-	xdead:
-		CRZM STT 3;
+		CRZM RST 5 A_SpawnItemEx("MegaBloodSplatter",0,0,34,0,0,0,0,160);
+	gibbed:
+		CRZM T 3;
 		CRZM U 5 canraise{
 			if(abs(vel.z)>1)setstatelabel("dead");    
 		}wait;
