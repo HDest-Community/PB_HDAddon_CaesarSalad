@@ -270,7 +270,7 @@ class PB_DozerZombie:HDHumanoid{
 		}
 	sliding:
 		#### A 0 A_StartSound("player/hdguy/land",flags:CHANF_OVERLAP);
-		#### W 0 A_HumanoidMeleeAttack(frandom(height*0.05,(!!target?target.height:0.4)),6.4);
+		#### W 0 A_HumanoidMeleeAttack(height*0.6,5.);
 		#### AAAWWWWWW 1 
 		{
 			A_Recoil(-1.75);
