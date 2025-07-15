@@ -118,6 +118,7 @@ class PB_ACRZombie:HDHumanoid{
 						laserOfs.z,
 						startalphaf:0.5,0.1,-1.5
 					);
+		
     }
 
 	void A_ZomFrag(){
@@ -255,8 +256,8 @@ class PB_ACRZombie:HDHumanoid{
 		{
 			double dt=distance3d(target);
 			if(
-				target
-				&&dt>300
+				//target
+				dt>300
 			)setstatelabel("aiming.lr");
 		}
 		#### E 5 {A_FaceLastTargetPos(30);A_Vocalize(seesound);}
@@ -397,7 +398,7 @@ class PB_ACRZombie:HDHumanoid{
 		#### E 12 {A_StartSound("weapons/rifleload",9);A_StartSound("weapons/rifleclick2");}
 		#### E 8{
 			A_StartSound("weapons/rifleclick2",8);
-			mag=25;
+			mag=42;
 		}
 		#### E 4 {A_StartSound("weapons/steyracr/cock1",CHAN_6,volume:0.6,pitch:0.92);}
 		#### E 12 {A_StartSound("weapons/steyracr/cock2",CHAN_6,volume:0.6);}

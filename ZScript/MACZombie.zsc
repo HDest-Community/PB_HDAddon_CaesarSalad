@@ -85,6 +85,7 @@ class PB_UndeadHomeslice:HDHumanoid{
 			bhasdropped=true;
 			let ppp=DropNewWeapon("HDMAC10");
 			ppp.weaponstatus[MACS_MAG]=thismag;
+			ppp.weaponstatus[MACS_AUTO]=1;
 			//ppp.weaponstatus[MACS_CHAMBER]=chamber;
 			
 			//if (!random(0, 12))DropNewWeapon("HDCombatKnife");
@@ -125,14 +126,14 @@ class PB_UndeadHomeslice:HDHumanoid{
 		painsound "grunt/pain";
 		deathsound "grunt/death";
 		activesound "grunt/active";
-		tag "''Jackboot Jr.''";
+		tag "Undead Hoodlum";
 
 		radius 10;
 		speed 23;
 		mass 100;
 		painchance 200;
-		obituary "%o was swiss cheesed by a junior jackboot.";
-		hitobituary "%o was pistol whipped by a junior jackboot.";
+		obituary "%o was swiss cheesed by a hoodlum.";
+		hitobituary "%o was pistol whipped by a hoodlum.";
 		maxtargetrange HDCONST_ONEMETRE*30;
 	}
 	states{
@@ -701,7 +702,12 @@ class PB_SpecOpsBlur:HDActor{
 	}
 	states{
 	spawn:
-		MIBZ # 0 nodelay Bright A_ChangeVelocity(frandom(-0.25,0.25),frandom(-0.25,0.25),frandom(-0.25,0.25));
+		MIBZ # 12 nodelay A_SetRenderStyle(0,style_none);
+		MIBZ # 0 Bright 
+		{
+			A_SetRenderStyle(0.2,style_add);
+			A_ChangeVelocity(frandom(-0.25,0.25),frandom(-0.25,0.25),frandom(-0.25,0.25));
+		}
 		MIBZ # 1 Bright A_FadeOut(0.01);
 		wait;
 	}

@@ -117,6 +117,7 @@ class PB_ACRZombie:HDHumanoid{
 						laserOfs.z,
 						startalphaf:0.5,0.1,-1.5
 					);
+		
     }
 
 	void A_ZomFrag(){

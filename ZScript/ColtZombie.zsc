@@ -173,8 +173,8 @@ class PB_ColtSMGZombie:HDHumanoid{
 			}
 			double dt=distance3d(target);
 			if(
-				target
-				&&!random(0,12)
+				//target
+				!random(0,12)
 				&&dt>600
 				&&dt<1000
 			)setstatelabel("frag");
